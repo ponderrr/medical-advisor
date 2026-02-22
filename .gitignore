@@ -1,0 +1,35 @@
+# Environment
+.env
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Data files
+data/raw/*.json
+data/processed/*.db
+data/processed/*.sqlite
+
+# Logs
+logs/*.log
+logs/*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!logs/.gitkeep
