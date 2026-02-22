@@ -1,0 +1,8 @@
+snscrape
+biopython
+requests
+beautifulsoup4
+praw
+python-dotenv
+pytest
+pytest-cov
