@@ -55,4 +55,33 @@ Edit `config/search_terms.json` to customize:
 
 ## Usage
 
-Coming soon...
+### Run All Scrapers
+```bash
+python run_scrapers.py
+```
+
+This will:
+1. Scrape 1000+ tweets from X/Twitter
+2. Pull 15-25 research papers from PubMed
+3. Get all clinical trials for Retatrutide
+4. Optionally scrape Reddit (you'll be asked)
+
+### Run Individual Scrapers
+```bash
+python scrapers/x_scraper.py
+python scrapers/pubmed_scraper.py
+python scrapers/clinical_trials_scraper.py
+python scrapers/reddit_scraper.py  # Requires Reddit API credentials
+```
+
+### Output
+
+All data saved to `data/raw/`:
+- `x_tweets_YYYY-MM-DD.json`
+- `pubmed_papers_YYYY-MM-DD.json`
+- `clinical_trials_YYYY-MM-DD.json`
+- `reddit_posts_YYYY-MM-DD.json` (if run)
+
+Logs saved to `logs/`:
+- `scrape_run_YYYY-MM-DD_HH-MM-SS.log`
+- `run_summary_YYYY-MM-DD_HH-MM-SS.json`
