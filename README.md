@@ -85,3 +85,24 @@ All data saved to `data/raw/`:
 Logs saved to `logs/`:
 - `scrape_run_YYYY-MM-DD_HH-MM-SS.log`
 - `run_summary_YYYY-MM-DD_HH-MM-SS.json`
+
+### Validate Data Quality
+
+After running scrapers, validate the collected data:
+```bash
+python validate_data.py
+```
+
+This will:
+- Check data quality and completeness
+- Verify required fields are present
+- Calculate summary statistics
+- Show sample data for manual review
+- Identify any issues or gaps
+- Generate validation report in `logs/`
+
+The validator checks:
+- **X/Twitter**: 1000+ tweets, valid fields, date ranges
+- **PubMed**: 15-25 papers, complete abstracts, journal diversity
+- **Clinical Trials**: All trials found, phase/status distribution
+- **Reddit**: 100+ items, substantial content, subreddit coverage
