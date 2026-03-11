@@ -39,7 +39,8 @@ client = TestClient(app)
 
 @pytest.fixture(autouse=True)
 def clean_db():
-    """Truncate all tables before each test."""
+    """Re-assert override and truncate all tables before each test."""
+    app.dependency_overrides[get_db] = override_get_db
     db = TestSession()
     for table in reversed(Base.metadata.sorted_tables):
         db.execute(table.delete())
@@ -217,3 +218,54 @@ def test_get_side_effects(db_with_data):
     data = response.json()
     assert len(data) == 1
     assert data[0]["effect"] == "Nausea"
+
+
+# ------------------------------------------------------------------ #
+# /api/health and /api/meta
+# ------------------------------------------------------------------ #
+
+def test_api_health_returns_all_table_keys():
+    response = client.get("/api/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["db_connected"] is True
+    tables = data["tables"]
+    for key in ("papers", "trials", "tweets", "reddit",
+                "dosing", "side_effects", "mechanisms", "conflicts"):
+        assert key in tables, f"Missing table key: {key}"
+
+
+def test_api_health_synthesis_ready_false_when_empty():
+    response = client.get("/api/health")
+    assert response.status_code == 200
+    assert response.json()["synthesis_ready"] is False
+
+
+def test_api_health_synthesis_ready_true():
+    """synthesis_ready requires ≥1 row in each of the 4 synthesis tables."""
+    from app.models import Mechanism, Conflict
+    db = TestSession()
+    db.add(DosingProtocol(source_type="paper", source_id="P001", dose="4mg"))
+    db.add(SideEffect(effect="nausea", severity="mild", frequency=1))
+    db.add(Mechanism(mechanism="GLP-1R", description="cAMP activation",
+                     sources=["paper:P001"], confidence="high"))
+    db.add(Conflict(topic="dosing", source_a_id="A", source_b_id="B",
+                    description="Conflict"))
+    db.commit()
+    db.close()
+
+    response = client.get("/api/health")
+    assert response.status_code == 200
+    assert response.json()["synthesis_ready"] is True
+
+
+def test_api_meta_returns_expected_keys():
+    response = client.get("/api/meta")
+    assert response.status_code == 200
+    data = response.json()
+    for key in ("compound", "aliases", "receptor_targets",
+                "last_scrape", "last_synthesis", "version"):
+        assert key in data, f"Missing meta key: {key}"
+    assert data["compound"] == "Retatrutide"
+    assert "GLP-1R" in data["receptor_targets"]
