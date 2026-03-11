@@ -106,3 +106,29 @@ The validator checks:
 - **PubMed**: 15-25 papers, complete abstracts, journal diversity
 - **Clinical Trials**: All trials found, phase/status distribution
 - **Reddit**: 100+ items, substantial content, subreddit coverage
+
+## Backend API
+
+The backend is a FastAPI application with SQLAlchemy ORM.
+
+### Setup
+```bash
+cd backend
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your Anthropic API key
+```
+
+### Run Development Server
+```bash
+cd backend
+uvicorn app.main:app --reload
+```
+
+API will be available at: http://localhost:8000
+API docs: http://localhost:8000/docs
+
+### Database
+
+SQLite database located at: `data/processed/medical_advisor.db`
+Tables: papers, clinical_trials, tweets, reddit_posts, dosing_protocols, side_effects, mechanisms, conflicts

@@ -29,6 +29,10 @@ logs/*.json
 .DS_Store
 Thumbs.db
 
+# Backend
+backend/.env
+backend/__pycache__/
+
 # Keep structure
 !data/raw/.gitkeep
 !data/processed/.gitkeep
