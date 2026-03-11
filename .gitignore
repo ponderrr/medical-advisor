@@ -37,3 +37,6 @@ backend/__pycache__/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !logs/.gitkeep
+frontend/node_modules/
+.next/
+*.env.local
