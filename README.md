@@ -132,3 +132,34 @@ API docs: http://localhost:8000/docs
 
 SQLite database located at: `data/processed/medical_advisor.db`
 Tables: papers, clinical_trials, tweets, reddit_posts, dosing_protocols, side_effects, mechanisms, conflicts
+
+## Data Pipeline
+
+### Load Data into Database
+
+After running scrapers, load JSON data into SQLite:
+```bash
+cd backend
+python load_data.py
+```
+
+This will:
+- Read all JSON files from `data/raw/`
+- Parse and validate data
+- Load into SQLite database
+- Print summary statistics
+
+### Query Data via API
+```bash
+# Get statistics
+curl http://localhost:8000/api/stats
+
+# Get papers
+curl http://localhost:8000/api/papers?limit=10
+
+# Get clinical trials (filter by phase)
+curl "http://localhost:8000/api/trials?phase=Phase%203"
+
+# Get tweets (filter by author)
+curl http://localhost:8000/api/tweets?author=BasedBiohacker
+```
